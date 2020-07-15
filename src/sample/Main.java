@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,7 +21,9 @@ public class Main extends Application{
             Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
         //root.autosize();
 
-        Scene scene = new Scene(root, 1200, 800);
+        Scene scene = new Scene(root, 1400, 900);
+        //stage.getIcons().add(new Image(getClass().getResource("icon.jpeg")));
+        stage.getIcons().add(new Image("/sample/icon.png"));
         stage.setTitle("Clothoid");
         stage.setScene(scene);
         stage.show();
