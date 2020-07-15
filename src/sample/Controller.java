@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.animation.Animation;
+import javafx.animation.PathTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -11,12 +13,17 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 import javafx.scene.shape.Box;
+import javafx.util.Duration;
 
 import javax.swing.*;
+
+import static javafx.animation.Animation.Status.STOPPED;
 
 public class Controller {
     @FXML TextField factorA; @FXML TextField factorB; @FXML TextField factorC; @FXML TextField factorD;
@@ -33,7 +40,10 @@ public class Controller {
     @FXML Slider limitSlider; @FXML Slider stepSlider; @FXML Slider SSlider; @FXML Slider CSlider; @FXML Slider DSlider;
     @FXML Label lbl_step; @FXML Label lbl_S; @FXML Label lbl_C; @FXML Label lbl_D; @FXML Label lbl_Min; @FXML Label lbl_Max;
     @FXML CheckBox cb_symb; @FXML CheckBox cb_pol; @FXML CheckBox cb_anim;
-    @FXML Box anim_box;
+    @FXML Rectangle rect_anim;
+
+    @FXML Polyline polyline;
+    PathTransition transition;
 
 //    // final?
 //    NumberAxis xAxis = new NumberAxis();
@@ -52,6 +62,9 @@ public class Controller {
         chart.getData().clear();
         chart.getData().add(series);
 
+        polyline.getPoints().clear();
+        polyline.setVisible(true);
+
         if (cb_symb.isSelected()) chart.setCreateSymbols(true); else if (!cb_symb.isSelected()) chart.setCreateSymbols(false);
     }
 
@@ -60,7 +73,10 @@ public class Controller {
         initInputControls();
         XYChart.Series<Number, Number> series = getSeries();
         chart.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
-        chart.getData().add(series);
+        //chart.getData().add(series);
+
+        polyline.getPoints().clear();
+        polyline.setVisible(true);
 
         // 5B5B5B // Elephant 16 //
         lbl_step.setText("Step:"); lbl_step.setTextFill(Color.web("#757575")); lbl_step.setFont(new Font("Arial Bold", 16));
@@ -70,13 +86,13 @@ public class Controller {
         lbl_Min.setText("Mn:"); lbl_Min.setTextFill(Color.web("#757575")); lbl_Min.setFont(new Font("Arial Bold", 16));
         lbl_Max.setText("Mx:"); lbl_Max.setTextFill(Color.web("#757575")); lbl_Max.setFont(new Font("Arial Bold", 16));
 
-        limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setMajorTickUnit(24); limitSlider.setBlockIncrement(1); limitSlider.setMax(50); limitSlider.setValue(Double.parseDouble(xMax.getText())); limitSlider.setMin(0.2);
+        limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setMajorTickUnit(24); limitSlider.setBlockIncrement(1); limitSlider.setMax(50); limitSlider.setValue(Double.parseDouble(xMax.getText())); limitSlider.setMin(1);
         limitSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
                 xMin.setText(String.valueOf(-(double)newValue)); xMax.setText(String.valueOf(newValue));
             }
         });
-        stepSlider.setShowTickLabels(true); stepSlider.setShowTickMarks(true); stepSlider.setMajorTickUnit(0.5); stepSlider.setBlockIncrement(0.05); stepSlider.setMax(1); stepSlider.setValue(Double.parseDouble(factorA.getText()));
+        stepSlider.setShowTickLabels(true); stepSlider.setShowTickMarks(true); stepSlider.setMajorTickUnit(0.4); stepSlider.setBlockIncrement(0.05); stepSlider.setMax(1); stepSlider.setValue(Double.parseDouble(factorA.getText())); stepSlider.setMin(0.1);
         stepSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
                 factorA.setText(String.valueOf(newValue));
@@ -109,7 +125,19 @@ public class Controller {
         redMaterial.setDiffuseColor(Color.DODGERBLUE);
         //redMaterial.setSpecularColor(Color.BLUE);
 
-        anim_box.setVisible(true); anim_box.setMaterial(redMaterial);
+        rect_anim.setVisible(true); rect_anim.setFill(Color.DODGERBLUE);
+        rect_anim.setWidth(20.0); rect_anim.setHeight(20.0);
+
+        series.setNode(rect_anim);
+        chart.getData().add(series);
+
+        transition = new PathTransition();
+        transition.setNode(rect_anim);
+        transition.setDuration(Duration.seconds(3));
+
+        transition.setCycleCount(2);
+        //transition.setCycleCount(PathTransition.INDEFINITE);
+        transition.setAutoReverse(true);
 
     }
 
@@ -159,21 +187,32 @@ public class Controller {
 
             }
 
-//            if (cb_anim.isSelected()) {
-//
-//                anim_box.setTranslateX(x_temp);
-//                anim_box.setTranslateY(y_temp);
-//
-//            }
-//            else if (!cb_anim.isSelected()) {
-//
-//                anim_box.relocate(-100.0, -100.0);
-//
-//            }
-
             System.out.println("[" + i + "]: " + "x_temp is " + x_temp + "; y_temp is " + y_temp);
 
+            polyline.getPoints().addAll(xAxis.getDisplayPosition(x_temp), yAxis.getDisplayPosition(y_temp));
             series.getData().add(new XYChart.Data(x_temp, y_temp));
+
+        }
+
+        //for (int j = 0; j < 300; j ++) {
+            System.out.println((polyline.getPoints().toString()));
+        //}
+
+        polyline.toFront();
+        polyline.setVisible(true);
+        rect_anim.toFront();
+        //polyline.getPoints().remove(0, 30);
+        //rect_anim.setX(polyline.getPoints().get(0)); rect_anim.setY(polyline.getPoints().get(1));
+
+        if (cb_anim.isSelected()) {
+
+            transition.setPath(polyline);
+            transition.play();
+
+        }
+        else if (!cb_anim.isSelected()) {// && transition.getStatus() == STOPPED) {
+
+            //transition.stop();
 
         }
 
@@ -181,8 +220,8 @@ public class Controller {
     }
 
     private void initInputControls() {
-        xMax.setText("10.0");
-        xMin.setText("-10.0");
+        xMax.setText("20.0");
+        xMin.setText("-20.0");
         factorA.setText("0.25");
         factorB.setText("10.0");
         factorC.setText("1.0");

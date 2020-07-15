@@ -10,6 +10,8 @@
 <?import com.sun.javafx.scene.control.skin.ColorPalette.ColorSquare?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Box?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.shape.Polyline?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
 <!--<AnchorPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">-->
     <children>
@@ -39,7 +41,8 @@
         <CheckBox fx:id="cb_pol" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="1200.0" />
         <CheckBox fx:id="cb_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="1200.0" />
 
-        <Box fx:id="anim_box" height="20.0" width="20.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" />
+        <Rectangle fx:id="rect_anim" />
+        <Polyline fx:id="polyline" />
 
         <!--        <Label fx:id="label" prefHeight="61.0" prefWidth="276.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="468.0" AnchorPane.rightAnchor="56.0" text="f(x)=" >-->
 <!--            <font>-->
