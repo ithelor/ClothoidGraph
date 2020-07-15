@@ -1,9 +1,12 @@
 package sample;
 
+import com.sun.glass.ui.Application;
+import com.sun.glass.ui.Robot;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -11,6 +14,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Polyline;
@@ -44,6 +48,8 @@ public class Controller {
 
     @FXML Polyline polyline;
     PathTransition transition;
+
+    @FXML Label monitor;
 
 //    // final?
 //    NumberAxis xAxis = new NumberAxis();
@@ -85,6 +91,19 @@ public class Controller {
         lbl_D.setText("D:"); lbl_D.setTextFill(Color.web("#757575")); lbl_D.setFont(new Font("Arial Bold", 16));
         lbl_Min.setText("Mn:"); lbl_Min.setTextFill(Color.web("#757575")); lbl_Min.setFont(new Font("Arial Bold", 16));
         lbl_Max.setText("Mx:"); lbl_Max.setTextFill(Color.web("#757575")); lbl_Max.setFont(new Font("Arial Bold", 16));
+
+        monitor.setText("X = "); monitor.setTextFill(Color.web("#757575")); monitor.setFont(new Font("Arial Bold", 16));
+
+        chart.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent event) {
+                String msg =
+                        //"(x: "       + event.getX()      + ", y: "       + event.getY()       + ") -- " +
+                                "X: "  + (xAxis.getDisplayPosition(0) + event.getX() - 1375.0) / 100 +
+                                        "\nY: "  + (yAxis.getDisplayPosition(0) + event.getY() - 695.0) / 100;
+
+                monitor.setText(msg);
+            }
+        });
 
         limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setMajorTickUnit(24); limitSlider.setBlockIncrement(1); limitSlider.setMax(50); limitSlider.setValue(Double.parseDouble(xMax.getText())); limitSlider.setMin(1);
         limitSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -189,7 +208,7 @@ public class Controller {
 
             System.out.println("[" + i + "]: " + "x_temp is " + x_temp + "; y_temp is " + y_temp);
 
-            polyline.getPoints().addAll(xAxis.getDisplayPosition(x_temp), yAxis.getDisplayPosition(y_temp));
+            polyline.getPoints().addAll(xAxis.getDisplayPosition(x_temp) + 75.0, yAxis.getDisplayPosition(y_temp) + 20.0);
             series.getData().add(new XYChart.Data(x_temp, y_temp));
 
         }
@@ -206,13 +225,21 @@ public class Controller {
 
         if (cb_anim.isSelected()) {
 
+//            try {
+//                System.out.println("Waiting of 1000...");
+//                Thread.sleep(1000);
+//                System.out.println("Done...");
+//            } catch (java.lang.InterruptedException ie) { System.out.println(ie); }
+
             transition.setPath(polyline);
             transition.play();
+            rect_anim.setVisible(true);
 
         }
         else if (!cb_anim.isSelected()) {// && transition.getStatus() == STOPPED) {
 
             //transition.stop();
+            rect_anim.setVisible(false);
 
         }
 
