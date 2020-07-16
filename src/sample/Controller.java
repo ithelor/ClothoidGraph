@@ -64,6 +64,10 @@ public class Controller {
 
     @FXML
     public void updateChart() {
+
+        if (cb_anim.isSelected()) { chart.setAnimated(false); }
+        else { chart.setAnimated(true); }
+
         XYChart.Series<Number, Number> series = getSeries();
         chart.getData().clear();
         chart.getData().add(series);
@@ -160,9 +164,29 @@ public class Controller {
 
     }
 
-    private XYChart.Series<Number, Number> getSeries() {
+    double f (double x) {                                              //DEFINIR la fonction à intégrer.
+        return Math.sin(Math.PI * Math.pow(x, 2) / 2);
+    }
 
-        System.out.println("Cartesian");
+    double IntSimpson(double a, double b,int n){                       //Methode de Simpson pour calcul intégrale
+        int i,z;                                                       //a= borne inférieure et b, borne supérieure d'intégration
+        double h,s;                                                    //n = nombre de pas
+
+        n=n+n;
+        s = f(a)*f(b);
+        h = (b-a)/n;
+        z = 4;
+
+        for(i = 1; i<n; i++){
+            s = s + z * f(a+i*h);
+            z = 6 - z;
+        }
+        return (s * h)/3;
+    }
+
+    double ub = 0, lb = 0; int n = 0;
+
+    private XYChart.Series<Number, Number> getSeries() {
 
         double xMax1 = Double.parseDouble(xMax.getText());
         double xMin1 = Double.parseDouble(xMin.getText());
@@ -199,10 +223,17 @@ public class Controller {
 
             if (cb_pol.isSelected()) {
 
-                pol_rds = Math.sqrt(Math.pow(x_temp, 2) + Math.pow(y_temp, 2));
+//                pol_rds = Math.sqrt(Math.sqrt(Math.pow(x_temp, 2) + Math.pow(y_temp, 2)));
+//
+//                x_temp = pol_rds * Math.cos(a);
+//                y_temp = pol_rds * Math.sin(a);
 
-                x_temp = pol_rds * Math.cos(a);
-                y_temp = pol_rds * Math.sin(a);
+                ub = 0;
+                lb = 10;
+                n = 10000000;
+                double resultat = IntSimpson(ub, lb, n);
+
+                y_temp = resultat;
 
             }
 

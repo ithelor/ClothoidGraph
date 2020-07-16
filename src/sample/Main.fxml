@@ -41,6 +41,7 @@
         <Polyline fx:id="polyline" />
 
         <Label fx:id="monitor" prefHeight="40.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="790.0" />
+        <CheckBox fx:id="cb_line_anim" prefHeight="40.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="790.0" />
 
         <!--        <Label fx:id="label" prefHeight="61.0" prefWidth="276.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="468.0" AnchorPane.rightAnchor="56.0" text="f(x)=" >-->
 <!--            <font>-->
