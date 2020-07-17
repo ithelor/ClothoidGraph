@@ -21,7 +21,8 @@ public class Main extends Application{
             Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
         //root.autosize();
 
-        Scene scene = new Scene(root, 1400, 900);
+        Scene scene = new Scene(root, 1070, 900);
+        stage.setMinWidth(1090); stage.setMinHeight(980); // doesn't math, idk why
         //stage.getIcons().add(new Image(getClass().getResource("icon.jpeg")));
         stage.getIcons().add(new Image("/sample/icon.png"));
         stage.setTitle("Clothoid");

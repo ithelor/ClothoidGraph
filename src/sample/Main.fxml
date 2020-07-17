@@ -8,8 +8,8 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.Polyline?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-<!--<AnchorPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">-->
     <children>
         <TextField fx:id="factorA" prefHeight="40.0" prefWidth="100.0" maxHeight="40.0" maxWidth="100.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" promptText="step" />
         <Slider fx:id="stepSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="60.0" />
@@ -33,23 +33,17 @@
         <Label fx:id="lbl_Min" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="600.0" />
         <Label fx:id="lbl_Max" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="600.0" />
 
-        <CheckBox fx:id="cb_symb" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="1200.0" />
-        <CheckBox fx:id="cb_pol" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="1200.0" />
-        <CheckBox fx:id="cb_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="1200.0" />
+        <CheckBox fx:id="cb_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="795.0" />
+        <CheckBox fx:id="cb_line_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="795.0" />
+        <CheckBox fx:id="cb_pol" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="935.0" />
+        <CheckBox fx:id="cb_symb" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="935.0" />
 
         <Rectangle fx:id="rect_anim" />
         <Polyline fx:id="polyline" />
 
-        <Label fx:id="monitor" prefHeight="60.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="790.0" />
-        <CheckBox fx:id="cb_line_anim" prefHeight="40.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="790.0" />
+        <Label fx:id="monitor" prefHeight="60.0" prefWidth="400.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="280.0" />
 
-        <!--        <Label fx:id="label" prefHeight="61.0" prefWidth="276.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="468.0" AnchorPane.rightAnchor="56.0" text="f(x)=" >-->
-<!--            <font>-->
-<!--                <Font size="18.0" />-->
-<!--            </font>-->
-<!--        </Label>-->
-<!--        layoutX="-100.0" layoutY="-100.0" prefHeight="500.0" prefWidth="400.0" from the LineChart-->
-        <LineChart fx:id="chart" AnchorPane.topAnchor="5.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+        <LineChart fx:id="chart" AnchorPane.topAnchor="5.0" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
             <xAxis>
                 <NumberAxis fx:id="xAxis" side="BOTTOM" />
             </xAxis>
@@ -57,6 +51,7 @@
                 <NumberAxis fx:id="yAxis" side="LEFT" />
             </yAxis>
         </LineChart>
-        <Button fx:id="button" prefHeight="40.0" prefWidth="100.0" rotate="90" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="710.0" layoutX="317.0" layoutY="612.0" mnemonicParsing="false" text="Proceed" onAction="#updateChart" />
+        <Button fx:id="button" prefHeight="40.0" prefWidth="100.0" rotate="90" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="710.0" mnemonicParsing="false" text="Proceed" onAction="#updateChart" />
+<!--        <Button fx:id="button_anim" prefHeight="40.0" prefWidth="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="1200.0" text="Animate" onAction="#runAnimation" />-->
     </children>
 </AnchorPane>
