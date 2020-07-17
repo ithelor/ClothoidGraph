@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
@@ -51,6 +52,8 @@ public class Controller {
 
     @FXML Label monitor;
 
+    @FXML CheckBox cb_line_anim;
+
 //    // final?
 //    NumberAxis xAxis = new NumberAxis();
 //    NumberAxis yAxis = new NumberAxis();
@@ -73,7 +76,7 @@ public class Controller {
         chart.getData().add(series);
 
         polyline.getPoints().clear();
-        polyline.setVisible(true);
+        //polyline.setVisible(true);
 
         if (cb_symb.isSelected()) chart.setCreateSymbols(true); else if (!cb_symb.isSelected()) chart.setCreateSymbols(false);
     }
@@ -86,7 +89,9 @@ public class Controller {
         //chart.getData().add(series);
 
         polyline.getPoints().clear();
-        polyline.setVisible(true);
+        //polyline.setVisible(true);
+
+        rect_anim.setVisible(false);
 
         // 5B5B5B // Elephant 16 //
         lbl_step.setText("Step:"); lbl_step.setTextFill(Color.web("#757575")); lbl_step.setFont(new Font("Arial Bold", 16));
@@ -99,17 +104,20 @@ public class Controller {
         monitor.setText("X = "); monitor.setTextFill(Color.web("#757575")); monitor.setFont(new Font("Arial Bold", 16));
 
         chart.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            //Bounds boundsInScene = chart.getNode().localToScene(point.getNode().getBoundsInLocal(), true);
             @Override public void handle(MouseEvent event) {
                 String msg =
                         //"(x: "       + event.getX()      + ", y: "       + event.getY()       + ") -- " +
-                                "X: "  + (xAxis.getDisplayPosition(0) + event.getX() - 1375.0) / 100 +
-                                        "\nY: "  + (yAxis.getDisplayPosition(0) + event.getY() - 695.0) / 100;
+                                        //"X: "  + (xAxis.getDisplayPosition(0) + event.getX() - 1375.0) / 100 +
+                                        "X: "  + (chart.screenToLocal(event.getX() * xAxis.getScaleX(), event.getY() * yAxis.getScaleY())) +
+                                                "\nX: "  + (xAxis.getDisplayPosition(0) + event.getX() - 1375.0) / 100 * xAxis.getScaleX() +
+                                                "\nY: "  + (yAxis.getDisplayPosition(0) + event.getY() - 695.0) / 100 * yAxis.getScaleY();
 
                 monitor.setText(msg);
             }
         });
 
-        limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setMajorTickUnit(24); limitSlider.setBlockIncrement(1); limitSlider.setMax(50); limitSlider.setValue(Double.parseDouble(xMax.getText())); limitSlider.setMin(1);
+        limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setMajorTickUnit(10); limitSlider.setBlockIncrement(1); limitSlider.setMax(25); limitSlider.setValue(Double.parseDouble(xMax.getText())); limitSlider.setMin(5);
         limitSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
                 xMin.setText(String.valueOf(-(double)newValue)); xMax.setText(String.valueOf(newValue));
@@ -142,7 +150,8 @@ public class Controller {
 
         cb_symb.setSelected(true); cb_symb.setText("Draw symbols");
         cb_pol.setSelected(false); cb_pol.setText("Draw polar");
-        cb_anim.setSelected(false); cb_anim.setText("Animate");
+        cb_anim.setSelected(false); cb_anim.setText("Animate object");
+        cb_line_anim.setSelected(true); cb_line_anim.setText("Animate line");
 
         final PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.DODGERBLUE);
@@ -150,6 +159,7 @@ public class Controller {
 
         rect_anim.setVisible(true); rect_anim.setFill(Color.DODGERBLUE);
         rect_anim.setWidth(20.0); rect_anim.setHeight(20.0);
+        rect_anim.setVisible(false);
 
         series.setNode(rect_anim);
         chart.getData().add(series);
@@ -168,7 +178,7 @@ public class Controller {
         return Math.sin(Math.PI * Math.pow(x, 2) / 2);
     }
 
-    double IntSimpson(double a, double b,int n){                       //Methode de Simpson pour calcul intégrale
+    double IntSimpson(double a, double b, int n){                       //Methode de Simpson pour calcul intégrale
         int i,z;                                                       //a= borne inférieure et b, borne supérieure d'intégration
         double h,s;                                                    //n = nombre de pas
 
@@ -186,6 +196,22 @@ public class Controller {
 
     double ub = 0, lb = 0; int n = 0;
 
+    private double iterate_x(double a, double b, double c) {
+
+        //(Math.pow(S, 3) / (6 * C)) - (Math.pow(S, 7) / (336 * Math.pow(C, 3)));
+        //Math.signum(a) * Math.abs(a) * Math.pow(b, 1.0/2.0) * Math.cos(b);
+        return c * (a - Math.pow(a, 5) / (1 * 2 * 5 * Math.pow(b, 4)) + Math.pow(a, 9) / (1 * 2 * 3 * 4 * 9 * Math.pow(b, 8)) - Math.pow(a, 13) / (1 * 2 * 3 * 4 * 5 * 6 * 13 * Math.pow(b, 12)));
+
+    }
+
+    private double iterate_y(double a, double b, double d) {
+
+        //S - (Math.pow(S, 5) / (40 * Math.pow(C, 2)));
+        //Math.signum(a) * Math.abs(a) * Math.pow(b, 1.0/2.0) * Math.sin(b);
+        return d * (Math.pow(a, 3) / (1 * 3 * Math.pow(b, 2)) - Math.pow(a, 7) / (1 * 2 * 3 * 7 * Math.pow(b, 6)) + Math.pow(a, 11) / (1 * 2 * 3 * 4 * 5 * 11 * Math.pow(b, 10)) - Math.pow(a, 15) / (1 * 2 * 3 * 4 * 5 * 6 * 7 * 15 * Math.pow(b, 14)));
+
+    }
+
     private XYChart.Series<Number, Number> getSeries() {
 
         double xMax1 = Double.parseDouble(xMax.getText());
@@ -196,44 +222,41 @@ public class Controller {
         double d = Double.parseDouble(factorD.getText());
 
         XYChart.Series<Number,Number> series = new XYChart.Series<Number, Number>();
+        XYChart.Series<Number,Number> ersatz = new XYChart.Series<Number, Number>();
         series.setName("Chart");
 
         double x_temp = 0, y_temp = 0; int i = 0;
         double pol_sin = 0, pol_cos = 0, pol_rds = 0, pol_angle = 10;
 
-        double left = xMin1, right = xMax1;
-
-        if (cb_pol.isSelected()) {
-
-            left = 0; right = 2 * Math.PI;
-
-        }
-
-        for (double a = left; a < right; a += step) {
+        for (double a = xMin1; a < xMax1; a += step) {
 
             i++;
 
-            x_temp = //(Math.pow(S, 3) / (6 * C)) - (Math.pow(S, 7) / (336 * Math.pow(C, 3)));
-                    c * (a - Math.pow(a, 5) / (1 * 2 * 5 * Math.pow(b, 4)) + Math.pow(a, 9) / (1 * 2 * 3 * 4 * 9 * Math.pow(b, 8)) - Math.pow(a, 13) / (1 * 2 * 3 * 4 * 5 * 6 * 13 * Math.pow(b, 12)));
-                    //Math.signum(a) * Math.abs(a) * Math.pow(b, 1.0/2.0) * Math.cos(b);
+            if (cb_pol.isSelected() && a!=0) {
 
-            y_temp = //S - (Math.pow(S, 5) / (40 * Math.pow(C, 2)));
-                    d * (Math.pow(a, 3) / (1 * 3 * Math.pow(b, 2)) - Math.pow(a,7) / (1 * 2 * 3 * 7 * Math.pow(b, 6)) + Math.pow(a, 11) / (1 * 2 * 3 * 4 * 5 * 11 * Math.pow(b, 10)) - Math.pow(a, 15) / (1 * 2 * 3 * 4 * 5 * 6 * 7 * 15 * Math.pow(b, 14)));
-                    //Math.signum(a) * Math.abs(a) * Math.pow(b, 1.0/2.0) * Math.sin(b);
+                x_temp = iterate_x(a, b, c);
+                y_temp = iterate_y(a, b, d);
 
-            if (cb_pol.isSelected()) {
+                if (cb_pol.isSelected()) {
 
-//                pol_rds = Math.sqrt(Math.sqrt(Math.pow(x_temp, 2) + Math.pow(y_temp, 2)));
+                    pol_rds = Math.sqrt(Math.pow(x_temp, 2) + Math.pow(y_temp, 2));
+                    pol_angle = Math.atan(x_temp / y_temp);
+
+                    x_temp = pol_rds * Math.cos(pol_angle);
+                    y_temp = pol_rds * Math.sin(pol_angle);
+
+//                ub = 0;
+//                lb = 10;
+//                n = 1000;
 //
-//                x_temp = pol_rds * Math.cos(a);
-//                y_temp = pol_rds * Math.sin(a);
+//                y_temp = IntSimpson(ub, lb, n);
 
-                ub = 0;
-                lb = 10;
-                n = 10000000;
-                double resultat = IntSimpson(ub, lb, n);
+                }
 
-                y_temp = resultat;
+            } else {
+
+                x_temp = iterate_x(a, b, c);
+                y_temp = iterate_y(a, b, d);
 
             }
 
@@ -244,11 +267,20 @@ public class Controller {
 
         }
 
-        //for (int j = 0; j < 300; j ++) {
-            System.out.println((polyline.getPoints().toString()));
-        //}
+//        double pre_last_x = 0, pre_last_y = 0, last_x = 0, last_y = 0, rate_x, rate_y;
+//
+//        ersatz.getData().add(new XYChart.Data(0, 0));
+//
+//        pre_last_x = Double.parseDouble(String.valueOf(ersatz.getData().get(ersatz.getData().size() - 1).getXValue()));
+//        pre_last_y = Double.parseDouble(String.valueOf(ersatz.getData().get(ersatz.getData().size() - 1).getYValue()));
+//        System.out.println("[Ersatz] Pre-last; x: " + pre_last_x + "; y: " + pre_last_y);
+//
+//        ersatz.getData().add(new XYChart.Data(1, 1));
+//
+//        last_x = Double.parseDouble(String.valueOf(ersatz.getData().get(ersatz.getData().size() - 1).getXValue()));
+//        last_y = Double.parseDouble(String.valueOf(ersatz.getData().get(ersatz.getData().size() - 1).getYValue()));
+//        System.out.println("[Ersatz] The last; x: " + last_x + "; y: " + last_y);
 
-        polyline.toFront();
         polyline.setVisible(true);
         rect_anim.toFront();
         //polyline.getPoints().remove(0, 30);
@@ -290,7 +322,6 @@ public class Controller {
         chart.setAnimated(true);
         xAxis.setLabel("X");
         yAxis.setLabel("Y");
-        //chart.setCreateSymbols(false);
     }
 
 }
