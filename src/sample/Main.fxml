@@ -27,11 +27,11 @@
         <Slider fx:id="DSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="480.0" />
         <Label fx:id="lbl_D" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="460.0" />
 
-        <TextField fx:id="xMin" prefHeight="40.0" prefWidth="60.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="630.0" promptText="xMin" />
-        <TextField fx:id="xMax" prefHeight="40.0" prefWidth="54.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="633.0" promptText="xMax" />
+        <TextField fx:id="xMin" prefHeight="40.0" prefWidth="60.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="630.0" promptText="xMin" />
+        <TextField fx:id="xMax" prefHeight="40.0" prefWidth="54.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="633.0" promptText="xMax" />
         <Slider fx:id="limitSlider" prefHeight="100.0" prefWidth="20.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="700.0" />
-        <Label fx:id="lbl_Min" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="600.0" />
-        <Label fx:id="lbl_Max" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="600.0" />
+        <Label fx:id="lbl_Min" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="600.0" />
+        <Label fx:id="lbl_Max" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="600.0" />
 
         <CheckBox fx:id="cb_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="795.0" />
         <CheckBox fx:id="cb_line_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="795.0" />

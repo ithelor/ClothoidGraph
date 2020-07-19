@@ -1,5 +1,6 @@
 package sample;
 
+import com.sun.jnlp.IntegrationServiceImpl;
 import javafx.animation.PathTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,6 +18,12 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
+import org.apache.commons.math3.analysis.integration.UnivariateIntegrator;
+import org.apache.commons.math3.analysis.integration.gauss.GaussIntegrator;
+import org.apache.commons.math3.analysis.integration.gauss.GaussIntegratorFactory;
+import org.apache.commons.math3.special.BesselJ;
 import org.apache.commons.math3.util.Precision;
 
 import java.text.DecimalFormat;
@@ -34,6 +41,9 @@ public class Controller {
     @FXML Rectangle rect_anim;
     @FXML Polyline polyline;
     PathTransition transition;
+
+    UnivariateIntegrator integrator;
+    double result;
 
     @FXML
     public void runAnimation() {
@@ -83,19 +93,18 @@ public class Controller {
 
         monitor.setText("X = "); monitor.setTextFill(Color.web("#757575")); monitor.setFont(new Font("Arial Bold", 12));
 
-        chart.setOnMouseMoved(new EventHandler<MouseEvent>() {
-            //Bounds boundsInScene = chart.getNode().localToScene(point.getNode().getBoundsInLocal(), true);
-            @Override public void handle(MouseEvent event) {
-
-                String msg =
-                    //"X: "  + (chart.screenToLocal(event.getX() * xAxis.getScaleX(), event.getY() * yAxis.getScaleY())) +
-                    "X: "  + Precision.round((xAxis.getDisplayPosition(0) + event.getX() - 1375.0) / 100 * xAxis.getScaleX(), 2) +
-                    "; Y: "  + Precision.round(((yAxis.getDisplayPosition(0) + event.getY() - 695.0) / 100 * yAxis.getScaleY()), 2);
-
-                monitor.setText(msg);
-
-            }
-        });
+//        chart.setOnMouseMoved(new EventHandler<MouseEvent>() {
+//            //Bounds boundsInScene = chart.getNode().localToScene(point.getNode().getBoundsInLocal(), true);
+//            @Override public void handle(MouseEvent event) {
+//
+//                String msg =
+//                    //"X: "  + (chart.screenToLocal(event.getX() * xAxis.getScaleX(), event.getY() * yAxis.getScaleY())) +
+//                    "X: "  + xAxis.getZeroPosition() + event.getX();
+//
+//                monitor.setText(msg);
+//
+//            }
+//        });
 
         factorA.textProperty().addListener((observable, oldValue, newValue) -> {
             cb_anim.setSelected(false); cb_anim.setDisable(true);
@@ -122,12 +131,17 @@ public class Controller {
         limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setMajorTickUnit(10); limitSlider.setBlockIncrement(1); limitSlider.setMax(25); limitSlider.setValue(Double.parseDouble(xMax.getText())); limitSlider.setMin(5);
         limitSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
-                xMax.setText(String.valueOf(Math.ceil((double)newValue)));
-                xMin.setText(String.valueOf(Math.ceil(-(double)newValue)));
+                if (cb_pol.isSelected()) {
+                    xMax.setText(String.valueOf(Precision.round((double) newValue, 3)));
+                    xMin.setText(String.valueOf(0));
+                } else {
+                    xMax.setText(String.valueOf(Precision.round((double) newValue, 1)));
+                    xMin.setText(String.valueOf(Precision.round(-(double) newValue, 1)));
+                }
             }
         });
 
-        stepSlider.setShowTickLabels(true); stepSlider.setShowTickMarks(true); stepSlider.setMajorTickUnit(0.4); stepSlider.setBlockIncrement(0.05); stepSlider.setMax(1); stepSlider.setValue(Double.parseDouble(factorA.getText())); stepSlider.setMin(0.1);
+        stepSlider.setShowTickLabels(true); stepSlider.setShowTickMarks(true); stepSlider.setMajorTickUnit(0.4); stepSlider.setBlockIncrement(0.05); stepSlider.setMax(1); stepSlider.setValue(Double.parseDouble(factorA.getText())); stepSlider.setMin(0.01);
         stepSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
                 factorA.setText(String.valueOf(Precision.round((double)newValue, 2)));
@@ -204,6 +218,7 @@ public class Controller {
         //(Math.pow(S, 3) / (6 * C)) - (Math.pow(S, 7) / (336 * Math.pow(C, 3)));
         //Math.signum(a) * Math.abs(a) * Math.pow(b, 1.0/2.0) * Math.cos(b);
         return c * (a - Math.pow(a, 5) / (1 * 2 * 5 * Math.pow(b, 4)) + Math.pow(a, 9) / (1 * 2 * 3 * 4 * 9 * Math.pow(b, 8)) - Math.pow(a, 13) / (1 * 2 * 3 * 4 * 5 * 6 * 13 * Math.pow(b, 12)));
+        //return (Math.pow(a, 2) - 1) / (Math.pow(a, 2) + 1);
 
     }
 
@@ -212,13 +227,37 @@ public class Controller {
         //S - (Math.pow(S, 5) / (40 * Math.pow(C, 2)));
         //Math.signum(a) * Math.abs(a) * Math.pow(b, 1.0/2.0) * Math.sin(b);
         return d * (Math.pow(a, 3) / (1 * 3 * Math.pow(b, 2)) - Math.pow(a, 7) / (1 * 2 * 3 * 7 * Math.pow(b, 6)) + Math.pow(a, 11) / (1 * 2 * 3 * 4 * 5 * 11 * Math.pow(b, 10)) - Math.pow(a, 15) / (1 * 2 * 3 * 4 * 5 * 6 * 7 * 15 * Math.pow(b, 14)));
+        //return (2 * a * Math.pow(a, 2) - 1) / Math.pow((Math.pow(a, 2) + 1), 2);
 
     }
 
     private XYChart.Series<Number, Number> getSeries() {
 
-        double xMax1 = Double.parseDouble(xMax.getText());
-        double xMin1 = Double.parseDouble(xMin.getText());
+        double xMax1 = 0, xMin1 = 0;
+
+//        xMax.setText(String.valueOf(xMax.getText()));
+//        xMin.setText(String.valueOf(xMin.getText()));
+
+        if (cb_pol.isSelected()) {
+            factorA.setText("0.01");
+            stepSlider.setValue(Double.parseDouble(factorA.getText()));
+            //xMax.setText(String.valueOf(Precision.round(Math.PI * 2, 3)));
+            //xMin.setText(String.valueOf(0));
+            limitSlider.setValue(Double.parseDouble(xMax.getText()));
+        } else {
+//            factorA.setText("0.25");
+//            xMax.setText("20.0");
+//            xMin.setText("-20.0");
+            limitSlider.setValue(Double.parseDouble(xMax.getText()));
+            stepSlider.setValue(Double.parseDouble(factorA.getText()));
+            SSlider.setValue(Double.parseDouble(factorB.getText()));
+            CSlider.setValue(Double.parseDouble(factorC.getText()));
+            DSlider.setValue(Double.parseDouble(factorD.getText()));
+        }
+
+        xMax1 = Double.parseDouble(xMax.getText());
+        xMin1 = Double.parseDouble(xMin.getText());
+
         double step = Double.parseDouble(factorA.getText());
         double b = Double.parseDouble(factorB.getText());
         double c = Double.parseDouble(factorC.getText());
@@ -235,22 +274,57 @@ public class Controller {
 
             i++;
 
-            if (cb_pol.isSelected() && a!=0) {
+            if (cb_pol.isSelected()) {// && a != 0) {
 
-                limitSlider.setMajorTickUnit(12.5); limitSlider.setMax(20); limitSlider.setMin(5);
+//                integrator = new SimpsonIntegrator(1.0e-12, 1.0e-8, 1, 32);
+//
+//                double finalI = a;
+//                x_temp = integrator.integrate(100, new UnivariateFunction() {
+//                    @Override
+//                    public double value(double v) {
+//                        v = finalI;
+//                        //return Math.sin(Math.PI * Math.pow(v, 2));
+//                        return Math.cos(Math.PI * Math.pow(v, 2) / 2);
+//                    }
+//                }, 0, 10);
+//
+//                y_temp = integrator.integrate(100, new UnivariateFunction() {
+//                    @Override
+//                    public double value(double v) {
+//                        v = finalI;
+//                        //return Math.cos(Math.PI * Math.pow(v, 2));
+//                        return Math.sin(Math.PI * Math.pow(v, 2) / 2);
+//                    }
+//                }, 0, 10);
 
-                if (a < 0) {
-                    x_temp = iterate_x(a, b, c); y_temp = -iterate_y(a, b, d);
-                } else {
-                    x_temp = iterate_x(a, b, c); y_temp = iterate_y(a, b, d);
-                }
 
-                if (cb_pol.isSelected()) {
+                limitSlider.setMajorTickUnit(Math.PI); limitSlider.setBlockIncrement(0.1); limitSlider.setMax(2 * Math.PI); limitSlider.setMin(0);
 
-                    pol_rds = Math.sqrt(Math.pow(x_temp, 2) + Math.pow(y_temp, 2));
-                    pol_angle = Math.atan(x_temp / y_temp);
+                //if (a < 0) {
+                //    x_temp = iterate_x(a, b, c); y_temp = -iterate_y(a, b, d);
+                //} else {
+                //x_temp = iterate_x(a, b, c); y_temp = iterate_y(a, b, d);
+                //}
 
-                    x_temp = pol_rds * Math.cos(pol_angle); y_temp = pol_rds * Math.sin(pol_angle);
+                //if (cb_pol.isSelected()) {
+
+//                pol_rds = Math.sqrt(Math.pow(x_temp, 2) + Math.pow(y_temp, 2));
+                pol_angle = a;
+
+                //pol_rds = Math.pow(1.0 / 2.0, pol_angle); // логарифмическая спираль
+                //pol_rds = Math.pow(3, pol_angle); // логарифмическая спираль
+
+                //pol_rds = 5 * Math.cos(pol_angle / 2); // спираль [0; 3]
+                //pol_rds = 2 * Math.sin(2 * pol_angle); // ??? [0; 6.3]
+                pol_rds = -3 * Math.pow(Math.cos(2 * pol_angle), 3); // ??? [0; 6.3]
+
+                //pol_rds = 3 * Math.sqrt(Math.cos(7 * pol_angle)); // [x] роза
+                //pol_rds = 3 * Math.sqrt(Math.cos(3 * pol_angle)); // [x] 3
+
+                //pol_rds = Math.sqrt(pol_angle); //
+                //pol_rds = Math.sin(pol_angle) / pol_angle; // спираль
+
+                x_temp = pol_rds * Math.cos(pol_angle); y_temp = pol_rds * Math.sin(pol_angle);
 
 //                ub = 0;
 //                lb = 10;
@@ -258,16 +332,30 @@ public class Controller {
 //
 //                y_temp = IntSimpson(ub, lb, n);
 
-                }
+                //}
 
             } else {
+                limitSlider.setMajorTickUnit(10); limitSlider.setBlockIncrement(1); limitSlider.setMax(25); limitSlider.setMin(5);
+
                 x_temp = iterate_x(a, b, c); y_temp = iterate_y(a, b, d);
             }
 
             System.out.println("[" + i + "]: " + "x_temp is " + x_temp + "; y_temp is " + y_temp);
 
-            polyline.getPoints().addAll(xAxis.getDisplayPosition(x_temp) + 69.0, yAxis.getDisplayPosition(y_temp) + 20.0);
-            series.getData().add(new XYChart.Data(x_temp, y_temp));
+            polyline.getPoints().addAll(xAxis.getDisplayPosition(x_temp) + 70.0, yAxis.getDisplayPosition(y_temp) + 20.0);
+
+            if(cb_symb.isSelected()) {
+
+                XYChart.Data chartData;
+                chartData = new XYChart.Data(x_temp, y_temp);
+                chartData.setNode(new ShowCoordinatesNode(x_temp, y_temp));
+                series.getData().add(chartData);
+
+            } else {
+
+                series.getData().add(new XYChart.Data(x_temp, y_temp));
+
+            }
 
         }
 
