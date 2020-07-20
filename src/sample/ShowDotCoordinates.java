@@ -8,9 +8,9 @@ import javafx.scene.layout.StackPane;
 
 import java.text.DecimalFormat;
 
-public class ShowCoordinatesNode extends StackPane {
+public class ShowDotCoordinates extends StackPane {
 
-    public ShowCoordinatesNode(double x, double y) {
+    public ShowDotCoordinates(double x, double y) {
 
         final Label label = createDataThresholdLabel(x, y);
 

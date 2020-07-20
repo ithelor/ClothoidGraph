@@ -121,7 +121,7 @@ public class Controller {
             cb_anim.setSelected(false); cb_anim.setDisable(true);
         });
 
-        limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setMajorTickUnit(10); limitSlider.setBlockIncrement(1); limitSlider.setMax(25); limitSlider.setValue(Double.parseDouble(xMax.getText())); limitSlider.setMin(5);
+        limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setMajorTickUnit(10); limitSlider.setBlockIncrement(0.1); limitSlider.setMax(8.0); limitSlider.setValue(Double.parseDouble(xMax.getText())); limitSlider.setMin(6.0);
         limitSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
 //                if (cb_pol.isSelected()) {
@@ -130,7 +130,7 @@ public class Controller {
 //                } else {
                     xMax.setText(String.valueOf(Precision.round((double) newValue, 1)));
                     //xMin.setText(String.valueOf(Precision.round(-(double) newValue, 1)));
-                    xMin.setText(String.valueOf(0));
+                    //xMin.setText(String.valueOf(6.7));
 //                }
             }
         });
@@ -256,7 +256,7 @@ public class Controller {
 
 
                 //limitSlider.setMajorTickUnit(Math.PI); limitSlider.setBlockIncrement(0.1);
-                limitSlider.setMajorTickUnit(50); limitSlider.setBlockIncrement(1); limitSlider.setMax(100); //limitSlider.setMin(0);
+                //limitSlider.setMajorTickUnit(50); limitSlider.setBlockIncrement(1); limitSlider.setMax(100); //limitSlider.setMin(0);
 
                 //if (a < 0) {
                 //    x_temp = iterate_x(a, b, c); y_temp = -iterate_y(a, b, d);
@@ -279,7 +279,9 @@ public class Controller {
                 //pol_rds = 3 * Math.sqrt(Math.cos(7 * pol_angle)); // [x] роза
                 //pol_rds = 3 * Math.sqrt(Math.cos(3 * pol_angle)); // [x] 3
 
-                if (a > 0) pol_rds = Math.sqrt(a * 3); // ??? [0; 6.3]  <-----------------
+                if (a > 1)
+                    //pol_rds = Math.sqrt(a * 3); // ??? [0; 6.3]  <-----------------
+                    pol_rds = 10 / Math.sqrt(a); // ??? [0; 6.3]  <-----------------
                 //pol_rds = -3 * Math.pow(Math.cos(2 * pol_angle), 3); // ??? [0; 6.3]  <-----------------
                 //x_temp = pol_rds * Math.cos(pol_angle); y_temp = pol_rds * Math.sin(pol_angle); // <-----------------
                 //x_temp = Math.cos(Math.pow(a, 2) / 2); y_temp = Math.sin(Math.pow(a, 2) / 2); // <-----------------
@@ -299,7 +301,7 @@ public class Controller {
                 //}
 
             } else {
-                limitSlider.setMajorTickUnit(10); limitSlider.setBlockIncrement(1); limitSlider.setMax(25); limitSlider.setMin(5);
+                //limitSlider.setMajorTickUnit(10); limitSlider.setBlockIncrement(1); limitSlider.setMax(25); limitSlider.setMin(5);
 
                 function_body = Lbd * (Math.pow(Math.pow(2, a), 2) / 2 * Math.pow(2, 2));
                 //System.out.println("Lbd is " + Lbd);
@@ -316,7 +318,7 @@ public class Controller {
 
                 XYChart.Data chartData;
                 chartData = new XYChart.Data(x_temp, y_temp);
-                chartData.setNode(new ShowCoordinatesNode(x_temp, y_temp));
+                chartData.setNode(new ShowDotCoordinates(x_temp, y_temp));
                 series.getData().add(chartData);
 
             } else {
@@ -376,7 +378,7 @@ public class Controller {
     private void initInputControls() {
         xMax.setText("6.77");
         xMin.setText("6.7");
-        factorA.setText("0.0002");
+        factorA.setText("2.0E-4");
         factorL.setText("0.1");
         factorN.setText("0.1");
         factorLbd.setText("1.0");
@@ -388,11 +390,11 @@ public class Controller {
         yAxis.setLabel("Y");
     }
 
-    public void resetParameters(ActionEvent actionEvent) {
+    public void resetParameters() {
 
         xMax.setText("6.77");
         xMin.setText("6.7");
-        factorA.setText("0.0002");
+        factorA.setText("2.0E-4");
         factorL.setText("0.1");
         factorN.setText("0.1");
         factorLbd.setText("1.0");
