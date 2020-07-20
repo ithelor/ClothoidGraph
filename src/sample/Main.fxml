@@ -15,17 +15,17 @@
         <Slider fx:id="stepSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="60.0" />
         <Label fx:id="lbl_step" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="15.0" />
 
-        <TextField fx:id="factorB" prefHeight="40.0" prefWidth="100.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="200.0" promptText="S" />
-        <Slider fx:id="SSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="200.0" />
-        <Label fx:id="lbl_S" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="180.0" />
+        <TextField fx:id="factorL" prefHeight="40.0" prefWidth="100.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="200.0" promptText="S" />
+        <Slider fx:id="LSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="200.0" />
+        <Label fx:id="lbl_L" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="180.0" />
 
-        <TextField fx:id="factorC" prefHeight="40.0" prefWidth="100.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="340.0" promptText="C" />
-        <Slider fx:id="CSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="340.0" />
-        <Label fx:id="lbl_C" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="320.0" />
+        <TextField fx:id="factorN" prefHeight="40.0" prefWidth="100.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="340.0" promptText="C" />
+        <Slider fx:id="NSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="340.0" />
+        <Label fx:id="lbl_N" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="320.0" />
 
-        <TextField fx:id="factorD" prefHeight="40.0" prefWidth="100.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="480.0" promptText="C" />
-        <Slider fx:id="DSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="480.0" />
-        <Label fx:id="lbl_D" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="460.0" />
+        <TextField fx:id="factorLbd" prefHeight="40.0" prefWidth="100.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="480.0" promptText="C" />
+        <Slider fx:id="LbdSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="480.0" />
+        <Label fx:id="lbl_Lbd" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="460.0" />
 
         <TextField fx:id="xMin" prefHeight="40.0" prefWidth="60.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="630.0" promptText="xMin" />
         <TextField fx:id="xMax" prefHeight="40.0" prefWidth="54.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="633.0" promptText="xMax" />
@@ -41,9 +41,9 @@
         <Rectangle fx:id="rect_anim" />
         <Polyline fx:id="polyline" />
 
-        <Label fx:id="monitor" prefHeight="60.0" prefWidth="400.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="280.0" />
+        <Label fx:id="monitor" prefHeight="60.0" prefWidth="100.0" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="10.0" />
 
-        <LineChart fx:id="chart" AnchorPane.topAnchor="5.0" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+        <LineChart fx:id="chart" AnchorPane.topAnchor="5.0" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
             <xAxis>
                 <NumberAxis fx:id="xAxis" side="BOTTOM" />
             </xAxis>
@@ -51,7 +51,8 @@
                 <NumberAxis fx:id="yAxis" side="LEFT" />
             </yAxis>
         </LineChart>
-        <Button fx:id="button" prefHeight="40.0" prefWidth="100.0" rotate="90" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="710.0" mnemonicParsing="false" text="Proceed" onAction="#updateChart" />
+        <Button fx:id="button" prefHeight="50.0" prefWidth="80.0" rotate="90" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="720.0" mnemonicParsing="false" text="Proceed" onAction="#updateChart" />
+        <Button fx:id="reset_btn" prefHeight="20.0" prefWidth="50.0" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="735.0" mnemonicParsing="false" onAction="#resetParameters" />
 <!--        <Button fx:id="button_anim" prefHeight="40.0" prefWidth="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="1200.0" text="Animate" onAction="#runAnimation" />-->
     </children>
 </AnchorPane>
