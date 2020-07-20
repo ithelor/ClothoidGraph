@@ -27,23 +27,23 @@
         <Slider fx:id="LbdSlider" prefHeight="20.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="480.0" />
         <Label fx:id="lbl_Lbd" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="460.0" />
 
-        <TextField fx:id="xMin" prefHeight="40.0" prefWidth="60.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="630.0" promptText="xMin" />
         <TextField fx:id="xMax" prefHeight="40.0" prefWidth="54.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="633.0" promptText="xMax" />
+        <TextField fx:id="xMin" prefHeight="40.0" prefWidth="60.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="630.0" promptText="xMin" />
         <Slider fx:id="limitSlider" prefHeight="100.0" prefWidth="20.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="700.0" />
         <Label fx:id="lbl_Min" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="600.0" />
         <Label fx:id="lbl_Max" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="600.0" />
 
-        <CheckBox fx:id="cb_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="795.0" />
-        <CheckBox fx:id="cb_line_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="795.0" />
-        <CheckBox fx:id="cb_pol" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="935.0" />
-        <CheckBox fx:id="cb_symb" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="935.0" />
+        <CheckBox fx:id="cb_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="795.0" />
+        <CheckBox fx:id="cb_line_anim" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="795.0" />
+        <CheckBox fx:id="cb_pol" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="935.0" />
+        <CheckBox fx:id="cb_symb" prefHeight="10.0" prefWidth="140.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="935.0" />
 
         <Rectangle fx:id="rect_anim" />
         <Polyline fx:id="polyline" />
 
-        <Label fx:id="monitor" prefHeight="60.0" prefWidth="100.0" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="10.0" />
+        <Label fx:id="monitor" prefHeight="40.0" prefWidth="80.0" AnchorPane.bottomAnchor="102.0" AnchorPane.leftAnchor="580.0" />
 
-        <LineChart fx:id="chart" AnchorPane.topAnchor="5.0" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+        <LineChart fx:id="chart" AnchorPane.topAnchor="5.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
             <xAxis>
                 <NumberAxis fx:id="xAxis" side="BOTTOM" />
             </xAxis>

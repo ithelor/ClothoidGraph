@@ -81,7 +81,7 @@ public class Controller {
         lbl_Min.setText("Mn:"); lbl_Min.setTextFill(Color.web("#757575")); lbl_Min.setFont(new Font("Arial Bold", 16));
         lbl_Max.setText("Mx:"); lbl_Max.setTextFill(Color.web("#757575")); lbl_Max.setFont(new Font("Arial Bold", 16));
 
-        monitor.setTextFill(Color.web("#757575")); monitor.setFont(new Font("Arial Bold", 12));
+        monitor.setTextFill(Color.web("#757575")); monitor.setFont(new Font("Arial", 16));
 
 //        chart.setOnMouseMoved(new EventHandler<MouseEvent>() {
 //            //Bounds boundsInScene = chart.getNode().localToScene(point.getNode().getBoundsInLocal(), true);
@@ -115,44 +115,68 @@ public class Controller {
             cb_anim.setSelected(false); cb_anim.setDisable(true);
         });
         cb_pol.selectedProperty().addListener((observable, oldValue, newValue) -> {
+
             cb_anim.setSelected(false); cb_anim.setDisable(true);
+
+            if (!cb_pol.isSelected()) {
+
+                stepSlider.setMax(0.01); stepSlider.setMin(0.0002); stepSlider.setMajorTickUnit(100.0); stepSlider.setBlockIncrement(0.0001);
+                limitSlider.setMax(6.9); limitSlider.setMin(6.5); limitSlider.setMajorTickUnit(0.2); limitSlider.setBlockIncrement(0.1);
+                factorA.setText("2.0E-4"); xMax.setText("6.77"); xMin.setText("6.7");
+                stepSlider.setValue(Double.parseDouble(factorA.getText())); limitSlider.setValue(Double.parseDouble(xMax.getText()));
+                factorA.setText("2.0E-4"); xMax.setText("6.77"); xMin.setText("6.7");
+
+            }
+            else {
+
+                stepSlider.setMax(1.0); stepSlider.setMin(0.01); stepSlider.setMajorTickUnit(0.49); stepSlider.setBlockIncrement(0.0001);
+                limitSlider.setMax(25.0); limitSlider.setMin(1.0); limitSlider.setMajorTickUnit(11.5); limitSlider.setBlockIncrement(1.0);
+                factorA.setText("0.01"); xMax.setText("10.0"); xMin.setText("-10.0");
+                stepSlider.setValue(Double.parseDouble(factorA.getText())); limitSlider.setValue(Double.parseDouble(xMax.getText()));
+                factorA.setText("0.01"); xMax.setText("10.0"); xMin.setText("-10.0");
+
+            }
+
         });
         cb_symb.selectedProperty().addListener((observable, oldValue, newValue) -> {
             cb_anim.setSelected(false); cb_anim.setDisable(true);
         });
 
-        limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setMajorTickUnit(10); limitSlider.setBlockIncrement(0.1); limitSlider.setMax(8.0); limitSlider.setValue(Double.parseDouble(xMax.getText())); limitSlider.setMin(6.0);
+        limitSlider.setOrientation(Orientation.VERTICAL); limitSlider.setShowTickLabels(true); limitSlider.setShowTickMarks(true); limitSlider.setValue(Double.parseDouble(xMax.getText()));
+        limitSlider.setMax(6.9); limitSlider.setMin(6.5); limitSlider.setMajorTickUnit(0.2); limitSlider.setBlockIncrement(0.1);
         limitSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
-//                if (cb_pol.isSelected()) {
-//                    xMax.setText(String.valueOf(Precision.round((double) newValue, 3)));
-//                    xMin.setText(String.valueOf(0));
-//                } else {
+                if (!cb_pol.isSelected()) {
+                    xMax.setText(String.valueOf(Precision.round((double) newValue, 3)));
+                    //xMin.setText(String.valueOf(0));
+                } else {
                     xMax.setText(String.valueOf(Precision.round((double) newValue, 1)));
-                    //xMin.setText(String.valueOf(Precision.round(-(double) newValue, 1)));
-                    //xMin.setText(String.valueOf(6.7));
-//                }
+                    xMin.setText(String.valueOf(Precision.round(-(double) newValue, 1)));
+                }
             }
         });
 
-        stepSlider.setShowTickLabels(true); stepSlider.setShowTickMarks(true); stepSlider.setMajorTickUnit(0.4); stepSlider.setBlockIncrement(0.0001); stepSlider.setMax(0.001); stepSlider.setValue(Double.parseDouble(factorA.getText())); stepSlider.setMin(0.0002);
+        stepSlider.setShowTickLabels(true); stepSlider.setShowTickMarks(true); stepSlider.setValue(Double.parseDouble(factorA.getText()));
+        stepSlider.setMax(0.01); stepSlider.setMin(0.0002); stepSlider.setMajorTickUnit(100.0); stepSlider.setBlockIncrement(0.0001);
         stepSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
                 factorA.setText(String.valueOf(Precision.round((double)newValue, 5)));
             }
         });
 
-        LSlider.setShowTickLabels(true); LSlider.setShowTickMarks(true); LSlider.setMajorTickUnit(4); LSlider.setBlockIncrement(1); LSlider.setMax(10); LSlider.setValue(Double.parseDouble(factorL.getText())); LSlider.setMin(0.1);
+        LSlider.setShowTickLabels(true); LSlider.setShowTickMarks(true); LSlider.setValue(Double.parseDouble(factorL.getText()));
+        LSlider.setMax(10); LSlider.setMin(1.0); LSlider.setMajorTickUnit(4); LSlider.setBlockIncrement(1.0);
         LSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
-                factorL.setText(String.valueOf(Precision.round((double)newValue, 2)));
+                factorL.setText(String.valueOf(Precision.round((double)newValue, 0)));
             }
         });
 
-        NSlider.setShowTickLabels(true); NSlider.setShowTickMarks(true); NSlider.setMajorTickUnit(4); NSlider.setBlockIncrement(0.5); NSlider.setMax(10); NSlider.setValue(Double.parseDouble(factorN.getText())); NSlider.setMin(0.1);
+        NSlider.setShowTickLabels(true); NSlider.setShowTickMarks(true); NSlider.setValue(Double.parseDouble(factorN.getText()));
+        NSlider.setMax(10); NSlider.setMin(1.0); NSlider.setMajorTickUnit(4); NSlider.setBlockIncrement(1.0);
         NSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<?extends Number> observable, Number oldValue, Number newValue){
-                factorN.setText(String.valueOf(Precision.round((double)newValue, 2)));
+                factorN.setText(String.valueOf(Precision.round((double)newValue, 0)));
             }
         });
 
@@ -379,8 +403,8 @@ public class Controller {
         xMax.setText("6.77");
         xMin.setText("6.7");
         factorA.setText("2.0E-4");
-        factorL.setText("0.1");
-        factorN.setText("0.1");
+        factorL.setText("5.0");
+        factorN.setText("5.0");
         factorLbd.setText("1.0");
         chart.setCreateSymbols(false);
     }
@@ -392,21 +416,43 @@ public class Controller {
 
     public void resetParameters() {
 
-        xMax.setText("6.77");
-        xMin.setText("6.7");
-        factorA.setText("2.0E-4");
-        factorL.setText("0.1");
-        factorN.setText("0.1");
-        factorLbd.setText("1.0");
+        if (!cb_pol.isSelected()) {
 
-        limitSlider.setValue(Double.parseDouble(xMax.getText()));
-        stepSlider.setValue(Double.parseDouble(factorA.getText()));
-        LSlider.setValue(Double.parseDouble(factorL.getText()));
-        NSlider.setValue(Double.parseDouble(factorN.getText()));
-        LbdSlider.setValue(Double.parseDouble(factorLbd.getText()));
+            xMax.setText("6.77");
+            xMin.setText("6.7");
+            factorA.setText("2.0E-4");
+            factorL.setText("5.0");
+            factorN.setText("5.0");
+            factorLbd.setText("1.0");
 
-        xMax.setText("6.77");
-        xMin.setText("6.7");
+            limitSlider.setValue(Double.parseDouble(xMax.getText()));
+            stepSlider.setValue(Double.parseDouble(factorA.getText()));
+            LSlider.setValue(Double.parseDouble(factorL.getText()));
+            NSlider.setValue(Double.parseDouble(factorN.getText()));
+            LbdSlider.setValue(Double.parseDouble(factorLbd.getText()));
+
+            xMax.setText("6.77");
+            xMin.setText("6.7");
+
+        } else {
+
+            xMax.setText("10.0");
+            xMin.setText("-10.0");
+            factorA.setText("0.01");
+            factorL.setText("5.0");
+            factorN.setText("5.0");
+            factorLbd.setText("1.0");
+
+            limitSlider.setValue(Double.parseDouble(xMax.getText()));
+            stepSlider.setValue(Double.parseDouble(factorA.getText()));
+            LSlider.setValue(Double.parseDouble(factorL.getText()));
+            NSlider.setValue(Double.parseDouble(factorN.getText()));
+            LbdSlider.setValue(Double.parseDouble(factorLbd.getText()));
+
+            xMax.setText("10.0");
+            xMin.setText("-10.0");
+
+        }
 
     }
 }
